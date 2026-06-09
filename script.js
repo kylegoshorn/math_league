@@ -15,8 +15,8 @@
    ============================================================ */
 
 // ---- CURRENT WEEK INFO ----
-const WEEK_NUMBER = 8;         // Change this each week
-const SCHOOL_YEAR = "2024–25"; // School year label
+const WEEK_NUMBER = 1;         // Change this each week
+const SCHOOL_YEAR = "2026–27"; // School year label
 
 // ---- YOUR CLASSES ----
 // Edit the values below to match your actual class data.
