@@ -5,15 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marauders Math League | Mt. Vernon High School</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Google Fonts: Bebas Neue for scoreboard feel, Inter for body -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <!-- PapaParse: parses CSV data from Google Sheets -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
 <body>
 
-  <!-- ===== LOADING OVERLAY (hidden once data loads) ===== -->
+  <!-- LOADING OVERLAY -->
   <div id="loading-overlay">
     <div class="loading-inner">
       <div class="loading-spinner"></div>
@@ -21,12 +19,12 @@
     </div>
   </div>
 
-  <!-- ===== ERROR MESSAGE (shown if Google Sheets fetch fails) ===== -->
+  <!-- ERROR BANNER -->
   <div id="error-banner" style="display:none">
     ⚠️ Could not load data from Google Sheets. Check that your sheet is published and the ID in script.js is correct.
   </div>
 
-  <!-- ===== TOP HEADER / SCOREBOARD BANNER ===== -->
+  <!-- HEADER -->
   <header class="site-header">
     <div class="header-inner">
       <div class="header-logo">
@@ -43,20 +41,20 @@
     </div>
   </header>
 
-  <!-- ===== SCROLLING ANNOUNCEMENT TICKER ===== -->
+  <!-- TICKER -->
   <div class="ticker-wrap">
     <div class="ticker-content" id="ticker"></div>
   </div>
 
   <main class="main-content">
 
-    <!-- ===== ANNOUNCEMENT BANNER ===== -->
+    <!-- ANNOUNCEMENTS -->
     <section class="section" id="announcements-section">
       <h2 class="section-title">📢 Announcements</h2>
       <div class="announcements-grid" id="announcements-grid"></div>
     </section>
 
-    <!-- ===== CLASS LEADERBOARD ===== -->
+    <!-- LEADERBOARD -->
     <section class="section" id="leaderboard-section">
       <h2 class="section-title">🏆 Class Leaderboard</h2>
       <p class="section-subtitle">Ranked by Weekly Score — Updated each Friday</p>
@@ -79,40 +77,66 @@
       </div>
     </section>
 
-    <!-- ===== WEEKLY CHAMPION CARD ===== -->
+    <!-- WEEKLY CHAMPION -->
     <section class="section" id="champion-section">
       <h2 class="section-title">👑 Weekly Champion</h2>
       <div id="champion-card" class="champion-card"></div>
     </section>
 
-    <!-- ===== STAT CARDS ROW ===== -->
+    <!-- STAT CARDS -->
     <section class="section" id="stats-section">
       <h2 class="section-title">📊 Class Stats Breakdown</h2>
       <div class="stats-grid" id="stats-grid"></div>
     </section>
 
-    <!-- ===== GROWTH TRACKER ===== -->
+    <!-- GROWTH TRACKER -->
     <section class="section" id="growth-section">
       <h2 class="section-title">📈 Growth Tracker</h2>
       <p class="section-subtitle">Change from last assessment to current assessment</p>
       <div class="growth-grid" id="growth-grid"></div>
     </section>
 
-    <!-- ===== BADGES / ACHIEVEMENTS ===== -->
+    <!-- BADGES -->
     <section class="section" id="badges-section">
       <h2 class="section-title">🎖️ Badges &amp; Achievements</h2>
       <div class="badges-grid" id="badges-grid"></div>
     </section>
 
-    <!-- ===== UPCOMING EVENTS ===== -->
+    <!-- UPCOMING EVENTS (cards) -->
     <section class="section" id="events-section">
       <h2 class="section-title">📅 Upcoming Events</h2>
       <div class="events-grid" id="events-grid"></div>
     </section>
 
+    <!-- ===== ASSESSMENT CALENDAR ===== -->
+    <section class="section" id="calendar-section">
+      <h2 class="section-title">📆 Assessment Calendar</h2>
+      <div class="calendar-wrap">
+        <!-- Month navigation -->
+        <div class="calendar-nav">
+          <button class="cal-nav-btn" id="cal-prev">&#9664;</button>
+          <span class="cal-month-label" id="cal-month-label"></span>
+          <button class="cal-nav-btn" id="cal-next">&#9654;</button>
+        </div>
+        <!-- Day-of-week headers -->
+        <div class="calendar-dow">
+          <span>Sun</span><span>Mon</span><span>Tue</span>
+          <span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+        <!-- Calendar day grid (filled by JS) -->
+        <div class="calendar-grid" id="calendar-grid"></div>
+        <!-- Legend -->
+        <div class="calendar-legend">
+          <span class="cal-legend-item"><span class="cal-dot quiz"></span> Quiz</span>
+          <span class="cal-legend-item"><span class="cal-dot test"></span> Test</span>
+          <span class="cal-legend-item"><span class="cal-dot event"></span> Event</span>
+          <span class="cal-legend-item"><span class="cal-dot review"></span> Review</span>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
     <p>Mt. Vernon High School &nbsp;|&nbsp; Marauders Math League &nbsp;|&nbsp; Built with ❤️ for Fortville</p>
   </footer>
