@@ -16,18 +16,13 @@
    ★  ONLY THING YOU NEED TO EDIT IN THIS FILE  ★
    ============================================================ */
 
-// Paste your Google Sheet ID here.
-// Example: if your sheet URL is
-//   https://docs.google.com/spreadsheets/d/1aBcDeFgHiJkLmNoPqRsTuVwXyZ/edit
-// then your ID is:  1aBcDeFgHiJkLmNoPqRsTuVwXyZ
-const SPREADSHEET_ID = "YOUR_SHEET_ID_HERE";
+const SPREADSHEET_ID = "1nsmDpswUsilujx0qRc-I1mJQ4c-uG6hFnL3EwffP5HI";
 
 /* ============================================================
    ★  STOP — everything below runs automatically  ★
    ============================================================ */
 
 
-// Tab names in your Google Sheet — must match exactly
 const SHEET_TABS = {
   settings:      "Settings",
   classes:       "Classes",
@@ -35,7 +30,6 @@ const SHEET_TABS = {
   events:        "Events",
 };
 
-// These will be filled in from the sheet data
 let WEEK_NUMBER   = 1;
 let SCHOOL_YEAR   = "";
 let CLASSES       = [];
@@ -44,7 +38,6 @@ let EVENTS        = [];
 let scoredClasses = [];
 
 
-/* ---- BADGE DEFINITIONS (unchanged from v1) ---- */
 const BADGE_DEFINITIONS = [
   {
     id: "biggest-growth",
@@ -91,14 +84,10 @@ const BADGE_DEFINITIONS = [
 ];
 
 
-/* ========== GOOGLE SHEETS FETCH & PARSE ========== */
-
-// Builds the CSV export URL for a given sheet tab name
 function sheetUrl(tabName) {
   return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
 }
 
-// Fetches one sheet tab and returns parsed rows as an array of objects
 async function fetchSheet(tabName) {
   const response = await fetch(sheetUrl(tabName));
   if (!response.ok) throw new Error(`Could not fetch sheet: ${tabName}`);
@@ -107,7 +96,6 @@ async function fetchSheet(tabName) {
   return result.data;
 }
 
-// Loads all four tabs in parallel, then populates the global variables
 async function loadFromSheets() {
   const [settingsRows, classRows, announcementRows, eventRows] = await Promise.all([
     fetchSheet(SHEET_TABS.settings),
@@ -116,7 +104,6 @@ async function loadFromSheets() {
     fetchSheet(SHEET_TABS.events),
   ]);
 
-  // ---- SETTINGS tab (two columns: Key, Value) ----
   const settings = {};
   settingsRows.forEach(row => {
     if (row.Key) settings[row.Key.trim()] = row.Value;
@@ -124,22 +111,20 @@ async function loadFromSheets() {
   WEEK_NUMBER  = parseInt(settings["WeekNumber"]) || 1;
   SCHOOL_YEAR  = settings["SchoolYear"] || "";
 
-  // ---- CLASSES tab ----
   CLASSES = classRows.map(row => ({
-    id:               (row.Period || "").replace(/\s/g, "-").toLowerCase(),
-    name:             row.Name             || "",
-    period:           row.Period           || "",
-    quizAvg:          parseFloat(row.QuizAvg)          || 0,
-    exitTicketAvg:    parseFloat(row.ExitTicketAvg)    || 0,
-    hwCompletion:     parseFloat(row.HWCompletion)     || 0,
-    growthBonus:      parseFloat(row.GrowthBonus)      || 0,
-    behaviorPoints:   parseFloat(row.BehaviorPoints)   || 0,
+    id:                (row.Period || "").replace(/\s/g, "-").toLowerCase(),
+    name:              row.Name             || "",
+    period:            row.Period           || "",
+    quizAvg:           parseFloat(row.QuizAvg)          || 0,
+    exitTicketAvg:     parseFloat(row.ExitTicketAvg)    || 0,
+    hwCompletion:      parseFloat(row.HWCompletion)     || 0,
+    growthBonus:       parseFloat(row.GrowthBonus)      || 0,
+    behaviorPoints:    parseFloat(row.BehaviorPoints)   || 0,
     prevAssessmentAvg: parseFloat(row.PrevAssessmentAvg) || 0,
     currAssessmentAvg: parseFloat(row.CurrAssessmentAvg) || 0,
-    winStreak:        parseInt(row.WinStreak)           || 0,
+    winStreak:         parseInt(row.WinStreak)           || 0,
   }));
 
-  // ---- ANNOUNCEMENTS tab ----
   ANNOUNCEMENTS = announcementRows.map(row => ({
     type:  row.Type  || "info",
     icon:  row.Icon  || "📢",
@@ -147,7 +132,6 @@ async function loadFromSheets() {
     body:  row.Body  || "",
   }));
 
-  // ---- EVENTS tab ----
   EVENTS = eventRows.map(row => ({
     month: row.Month || "",
     day:   parseInt(row.Day) || 0,
@@ -156,7 +140,6 @@ async function loadFromSheets() {
     type:  row.Type  || "event",
   }));
 
-  // ---- Compute weekly scores and sort ----
   scoredClasses = CLASSES.map(cls => ({
     ...cls,
     weeklyScore: calculateScore(cls),
@@ -164,18 +147,10 @@ async function loadFromSheets() {
   })).sort((a, b) => b.weeklyScore - a.weeklyScore);
 }
 
-
-/* ---- SCORING FORMULA ----
-   Weekly Score = quizAvg + exitTicketAvg + hwCompletion + growthBonus + behaviorPoints
-   Max raw = 320 → scaled to 0–100 display score
-*/
 function calculateScore(cls) {
   const raw = cls.quizAvg + cls.exitTicketAvg + cls.hwCompletion + cls.growthBonus + cls.behaviorPoints;
   return Math.round((raw / 320) * 100);
 }
-
-
-/* ========== RENDER FUNCTIONS (same as v1) ========== */
 
 function renderHeader() {
   const dateEl = document.getElementById("live-date");
@@ -188,7 +163,7 @@ function renderHeader() {
 
 function renderTicker() {
   const el = document.getElementById("ticker");
-  const topHW  = scoredClasses.reduce((a, b) => a.hwCompletion  > b.hwCompletion  ? a : b);
+  const topHW   = scoredClasses.reduce((a, b) => a.hwCompletion > b.hwCompletion ? a : b);
   const topQuiz = scoredClasses.reduce((a, b) => a.quizAvg > b.quizAvg ? a : b);
   const items = [
     `🏆 WEEK ${WEEK_NUMBER} LEADER: ${scoredClasses[0].name} – ${scoredClasses[0].period}`,
@@ -368,8 +343,6 @@ function renderAll() {
   renderEvents();
 }
 
-
-/* ========== MAIN — fetch data then render ========== */
 document.addEventListener("DOMContentLoaded", async () => {
   const overlay = document.getElementById("loading-overlay");
   const errorBanner = document.getElementById("error-banner");
@@ -378,7 +351,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadFromSheets();
     overlay.classList.add("hidden");
     renderAll();
-    // Auto-refresh date every minute
     setInterval(renderHeader, 60000);
   } catch (err) {
     console.error("Sheets load error:", err);
