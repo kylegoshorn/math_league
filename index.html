@@ -8,14 +8,28 @@
   <!-- Google Fonts: Bebas Neue for scoreboard feel, Inter for body -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <!-- PapaParse: parses CSV data from Google Sheets -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
 <body>
+
+  <!-- ===== LOADING OVERLAY (hidden once data loads) ===== -->
+  <div id="loading-overlay">
+    <div class="loading-inner">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading Marauders Data...</div>
+    </div>
+  </div>
+
+  <!-- ===== ERROR MESSAGE (shown if Google Sheets fetch fails) ===== -->
+  <div id="error-banner" style="display:none">
+    ⚠️ Could not load data from Google Sheets. Check that your sheet is published and the ID in script.js is correct.
+  </div>
 
   <!-- ===== TOP HEADER / SCOREBOARD BANNER ===== -->
   <header class="site-header">
     <div class="header-inner">
       <div class="header-logo">
-        <!-- Swap this emoji for an actual school logo image if you have one -->
         <span class="logo-icon">⚔️</span>
         <div class="header-titles">
           <span class="school-name">Mt. Vernon High School</span>
